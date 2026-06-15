@@ -6,11 +6,12 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
 
+    <!-- Cesium JS and CSS -->
     <script src="https://cesium.com/downloads/cesiumjs/releases/1.133/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.133/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
 
-    <link
-        href="https://cesium.com/downloads/cesiumjs/releases/1.133/Build/Cesium/Widgets/widgets.css"
-        rel="stylesheet">
+    <!-- Custom App Styles -->
+    <link href="stylesheet.css" rel="stylesheet">
 
     <style>
         html, body, #cesiumContainer {
@@ -19,17 +20,17 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
+            background-color: #000;
         }
     </style>
 </head>
 
 <body>
 
-<div id="cesiumContainer"></div>
+    <div id="cesiumContainer"></div>
 
-
-<script src="app.js?v=1.0.1"></script>
-
+    <!-- Main JS Application -->
+    <script src="app.js?v=1.0.1"></script>
 
 </body>
 </html>
