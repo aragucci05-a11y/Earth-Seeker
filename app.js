@@ -8,7 +8,8 @@ const viewer = new Cesium.Viewer("cesiumContainer");
 const layerState = {
     earthquakes: { ref: null, visible: false },
     weather: { refClouds: null, refPrecip: null, visible: false },
-    auroras: { ref: null, visible: false }
+    auroras: { ref: null, visible: false },
+    daynight: { ref: null, visible: false }
 };
 
 // ==========================================
@@ -231,6 +232,46 @@ async function toggleAuroras(enable) {
     layerState.auroras.visible = enable;
 }
 
+
+// ==========================================
+// 4. DAY/NIGHT LAYER
+// ==========================================
+function toggleDayNight(enable) {
+    viewer.scene.globe.enableLighting = enable;
+    viewer.scene.globe.dynamicAtmosphereLighting = enable;
+    
+    if (enable) {
+        if (!layerState.daynight.ref) {
+            try {
+                console.log("Loading NASA GIBS Black Marble night lights...");
+                const nightLightsProvider = new Cesium.UrlTemplateImageryProvider({
+                    url: "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_Black_Marble/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.png",
+                    maximumLevel: 8,
+                    credit: "NASA GIBS"
+                });
+                const layer = viewer.imageryLayers.addImageryProvider(nightLightsProvider);
+                layer.dayAlpha = 0.0;
+                layer.nightAlpha = 1.0;
+                layer.brightness = 2; // Boost brightness so they remain visible when zoomed out
+                layer.contrast = 1.8;   // Boost contrast to make the city lights pop vividly
+                layerState.daynight.ref = layer;
+            } catch (error) {
+                console.error("Error loading night lights layer:", error);
+            }
+        }
+        if (layerState.daynight.ref) {
+            layerState.daynight.ref.show = true;
+        }
+    } else {
+        if (layerState.daynight.ref) {
+            layerState.daynight.ref.show = false;
+        }
+    }
+    
+    layerState.daynight.visible = enable;
+}
+
+
 // ==========================================
 // CONTROL PANEL UI INITIALIZATION
 // ==========================================
@@ -270,7 +311,7 @@ function setupUI() {
                     <span class="slider round"></span>
                 </label>
                 <div class="layer-info">
-                    <span class="layer-title">Clouds & Temperature</span>
+                    <span class="layer-title">Infrared Clouds & Temperature</span>
                     <span class="layer-desc">EUMETSAT clouds & RainViewer radar</span>
                 </div>
             </div>
@@ -295,6 +336,20 @@ function setupUI() {
             <div class="legend" id="auroraLegend" style="display:none;">
                 <span class="legend-item"><span class="dot aurora-green"></span> Standard Aurora</span>
                 <span class="legend-item"><span class="dot aurora-purple"></span> Intense Aurora</span>
+            </div>
+
+            <hr class="divider">
+
+            <!-- Day/Night Layer -->
+            <div class="control-row">
+                <label class="switch">
+                    <input type="checkbox" id="chkDayNight">
+                    <span class="slider round"></span>
+                </label>
+                <div class="layer-info">
+                    <span class="layer-title">Day/Night Cycle</span>
+                    <span class="layer-desc">Real-time solar shading & atmosphere</span>
+                </div>
             </div>
         </div>
     `;
@@ -324,6 +379,11 @@ function setupUI() {
         const active = e.target.checked;
         document.getElementById("auroraLegend").style.display = active ? "flex" : "none";
         await toggleAuroras(active);
+    });
+
+    document.getElementById("chkDayNight").addEventListener("change", (e) => {
+        const active = e.target.checked;
+        toggleDayNight(active);
     });
 }
 
