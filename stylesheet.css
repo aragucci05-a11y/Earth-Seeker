@@ -160,3 +160,7 @@ input:checked + .slider:before {
 .dot.red { background-color: #f44336; box-shadow: 0 0 6px #f44336; }
 .dot.aurora-green { background-color: #00ff66; box-shadow: 0 0 6px #00ff66; }
 .dot.aurora-purple { background-color: #cc00ff; box-shadow: 0 0 6px #cc00ff; }
+
+.cesium-widget-credits {
+  display: none !important;
+}   

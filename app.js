@@ -2,7 +2,10 @@
 Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIyMzI2OGQxYy1jMzVkLTRmNzUtYTI2NC1hYWUzMDNkOWVjZWEiLCJpZCI6NDQzMjY4LCJzdWIiOiJBbmdlbG8yMCIsImlzcyI6Imh0dHBzOi8vYXBpLmNlc2l1bS5jb20iLCJhdWQiOiJBbmdlbG8yMF9kZWZhdWx0IiwiaWF0IjoxNzgxMTkyNTc5fQ.4xGDesdC7H6rTfiqEVFEdzWvsDFGwUHUKqobzMrYB6E";
 
 // Initialize Cesium Viewer with default OpenStreetMap base layer
-const viewer = new Cesium.Viewer("cesiumContainer");
+const viewer = new Cesium.Viewer("cesiumContainer", {
+    timeline: false,
+    animation: false
+});
 
 // State to store loaded layer objects and visibility
 const layerState = {
@@ -270,6 +273,11 @@ function toggleDayNight(enable) {
     
     layerState.daynight.visible = enable;
 }
+
+// ==========================================
+// 5. COUNTRY BORDERS LAYER
+// ==========================================
+
 
 
 // ==========================================
